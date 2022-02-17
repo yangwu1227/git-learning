@@ -1,1 +1,3 @@
 # git-resources
+
+Git learning.
