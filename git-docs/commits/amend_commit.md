@@ -31,3 +31,48 @@
    ```bash
    git rebase --continue
    ```
+
+### Fixup + Autosquash
+
+1. **Create a fixup commit**
+
+   ```bash
+   git commit --fixup <target-commit> -m "fixup: <message>"
+   ```
+
+   Where `<target-commit>` is the SHA of the commit we want our work folded into.
+
+2. **Invoke an interactive rebase with autosquash**
+
+   ```bash
+   git rebase -i --autosquash <base>
+   ```
+
+   * `<base>` can be:
+
+     * `HEAD~N` (to rewrite the last N commits),
+     * or the SHA of the commit **just before** the oldest commit in the range. For example, if the history is `a -> b -> c -> d -> e (HEAD)` and we want to rewrite `b`, we could use either
+
+     ```bash
+     # By position
+     git rebase -i --autosquash HEAD~5
+     ```
+
+     or
+
+     ```bash
+     # By hash (parent of a):
+     git rebase -i --autosquash <hash-of-a>  # (<hash-of-a> is a’s SHA)
+     ```
+
+3. **Save & quit the editor**
+
+   Git will automatically turn the fixup into an "autosquash" next to `<target-commit>`.
+
+4. **Finish the rebase**
+
+   ```bash
+   git rebase --continue
+   ```
+
+   Resolve any conflicts as they arise; afterward the fixup will be squashed into the target commit, and the rest of the commits (`c`, `d`, `e`) replayed unchanged.
